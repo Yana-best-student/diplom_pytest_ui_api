@@ -1,0 +1,1 @@
+# diplom_pytest_ui_api

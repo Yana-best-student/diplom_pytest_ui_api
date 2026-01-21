@@ -16,13 +16,13 @@ class UiPage:
     def go(self):
         self.__driver.get(self.__url)
 
+    #Передаем значение cookie
     def set_cookie_policy(self):
         cookie = {
             "name": "COOKIES_MASSAGE_APPLY",
             "value": "true"
         }
         self.__driver.add_cookie(cookie)
-
 
     def search(self, term):
         #Ожидаем появления поля поиска

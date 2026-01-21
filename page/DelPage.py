@@ -5,7 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-class CartPage:
+class DelPage:
 
     def __init__(self, browser: WebDriver) -> None:
         self.__url = "https://shop.mts.ru/"
@@ -71,5 +71,21 @@ class CartPage:
         number_str = txt.split()[0]  # Забираем только число из строки, если это необходимо
         return int(number_str)
     
-    
-    
+    def del_counter(self):
+        #Нажимаем на иконку удаления
+        WebDriverWait(self.__driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//button[@class='product-card-basket-purchase__btn-delete']"))
+            )
+        self.__driver.find_element(
+           By.XPATH, "//button[@class='product-card-basket-purchase__btn-delete']").click()
+        
+        counter = WebDriverWait(self.__driver, 30).until(
+            EC.visibility_of_element_located((By.CLASS_NAME, "basket-empty__text"))
+            )
+        counter_text = counter.text
+        print(counter_text)
+        
+        # Проверка наличия текста "Пока в корзине нет товаров..."
+        if "Пока в корзине нет товаров..." in counter_text:
+            print("Корзина теперь пуста.")
+        

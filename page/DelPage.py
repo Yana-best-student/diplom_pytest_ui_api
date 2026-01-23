@@ -8,14 +8,22 @@ from selenium.webdriver.support.ui import WebDriverWait
 class DelPage:
 
     def __init__(self, browser: WebDriver) -> None:
+        """
+        Конструктор класса PageObject.
+        :param driver: Webdriver — объект драйвера Selenium.
+        """
         self.__url = "https://shop.mts.ru/"
         self.__driver = browser
 
-
+    @allure.step("Открытие главной страницы интернет-магазина")
     def go(self):
+        """
+        Открывает страницу "shop.mts.ru" в браузере,
+        использует driver.get для открытия страницы
+        """
         self.__driver.get(self.__url)
 
-    #Передаем значение cookie
+    @allure.step("Передаем значение cookie")
     def set_cookie_policy(self):
         cookie = {
             "name": "COOKIES_MASSAGE_APPLY",
@@ -23,47 +31,64 @@ class DelPage:
         }
         self.__driver.add_cookie(cookie)
 
-        
+    @allure.step("Поиск товара через поисковую строку")   
     def add_product(self, term):
-        #Ожидаем появления поля поиска
+        """
+        Ожидаем появления поля поиска, кликаем на него.
+        """
         (WebDriverWait(self.__driver, 10).
          until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input[name='q']"))))
         
         self.__driver.find_element(
             By.CSS_SELECTOR, "input[name='q']").click()
 
-        #Вводим в строку поиска название товара
+        """
+        Вводим в строку поиска название товара 'Смартфон TECNO Camon 40'.
+        """  
         (WebDriverWait(self.__driver, 10).
          until(EC.visibility_of_element_located((By.XPATH, "//input[@id='search-popup-field']"))))
         self.__driver.find_element(
             By.XPATH, "//input[@id='search-popup-field']").send_keys(term)
         
-        #нажимаем кнопку "Найти"
+        """
+        нажимаем кнопку "Найти".
+        """
         self.__driver.find_element(
             By.XPATH, "//span[text()='Найти']").click()
         
+    @allure.step("Добавление товара в корзину")
     def cart_input(self):
-        # Ждем, пока элемент станет видимым
+        """
+        Ждем, пока кнопка 'Купить' станет видимой, нажимаем на кнопку.
+        """
         WebDriverWait(self.__driver, 30).until(
             EC.visibility_of_element_located((By.XPATH, "(//div[@class='mtsds-button__text-container' and contains(text(), 'Купить')])[1]"))
         ).click()
 
+    @allure.step("Переход в корзину")
     def cart_count(self):
-        # Закрываем всплывающее окно
+        """
+        Закрываем окно с предложением 'Собрать выгодный комплект' нажатием на иконку крестика в правом верхнем углу.
+        """
         element = WebDriverWait(self.__driver, 10).until(
             EC.visibility_of_element_located((By.XPATH, "//button[@aria-label='Закрыть']"))
         )
         self.__driver.execute_script("arguments[0].scrollIntoView();", element)
         element.click()
 
-        # Заходим в корзину   
+        """
+        Нажимаем на иконку корзины, ожидая пока она станет видимой
+        """  
         WebDriverWait(self.__driver, 30).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, "button[data-v-b4ce07b4]")))
         self.__driver.find_element(
            By.CSS_SELECTOR, "button[data-v-b4ce07b4]").click()
         
+    @allure.step("Проверяем, что товар добавлен в корзину")    
     def get_counter(self):
-        #Проверяем, что счетчик не пустой
+        """
+        Проверяем, что счетчик корзины не пустой
+        """
         WebDriverWait(self.__driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//input[@name='input-quantity']"))
             )
@@ -71,21 +96,27 @@ class DelPage:
         number_str = txt.split()[0]  # Забираем только число из строки, если это необходимо
         return int(number_str)
     
+    @allure.step("Удаляем товар из корзины")
     def del_counter(self):
-        #Нажимаем на иконку удаления
+        """
+        Нажимаем на иконку удаления, ожидая пока она станет видимой
+        """
         WebDriverWait(self.__driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//button[@class='product-card-basket-purchase__btn-delete']"))
             )
         self.__driver.find_element(
            By.XPATH, "//button[@class='product-card-basket-purchase__btn-delete']").click()
-        
+        """
+        Ожидаем появления сообщения 'Пока в корзине нет товаров, выберите что-нибудь из каталога'
+        """
         counter = WebDriverWait(self.__driver, 30).until(
             EC.visibility_of_element_located((By.CLASS_NAME, "basket-empty__text"))
             )
         counter_text = counter.text
         print(counter_text)
-        
-        # Проверка наличия текста "Пока в корзине нет товаров..."
+        """
+        Проверка наличия текста 'Пока в корзине нет товаров...'
+        """
         if "Пока в корзине нет товаров..." in counter_text:
             print("Корзина теперь пуста.")
         

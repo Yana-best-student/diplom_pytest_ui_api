@@ -120,7 +120,7 @@ class PayPage:
         first_item.click()
 
         """
-        Нажимаем кнопку 'Далее' лля перехода в форму выбора способа оплаты.
+        Нажимаем кнопку 'Далее' для перехода в форму выбора способа оплаты.
         """
         (WebDriverWait(self.__driver, 10).until(
             EC.visibility_of_element_located((By.XPATH, "//button[contains(@class, 'button--primary')]"))))

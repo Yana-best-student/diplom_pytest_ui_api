@@ -6,7 +6,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 
-
 class UiPage:
 
     def __init__(self, browser: WebDriver) -> None:
@@ -46,16 +45,14 @@ class UiPage:
 
         """
         Вводим в строку поиска название товара 'iphone'.
-        """ 
+        """
         (WebDriverWait(self.__driver, 10).
          until(EC.visibility_of_element_located((By.XPATH, "//input[@id='search-popup-field']"))))
         self.__driver.find_element(
             By.XPATH, "//input[@id='search-popup-field']").send_keys(term)
-        
+
         """
         нажимаем кнопку "Найти".
         """
         self.__driver.find_element(
             By.XPATH, "//span[text()='Найти']").click()
-    
-    

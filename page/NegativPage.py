@@ -6,7 +6,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 
-
 class NegativPage:
 
     def __init__(self, browser: WebDriver) -> None:
@@ -16,7 +15,7 @@ class NegativPage:
         """
         self.__url = "https://shop.mts.ru/"
         self.__driver = browser
-    
+
     @allure.step("Открытие главной страницы интернет-магазина")
     def go(self):
         """
@@ -32,7 +31,7 @@ class NegativPage:
             "value": "true"
         }
         self.__driver.add_cookie(cookie)
-    
+
     @allure.step("Поиск товара через поисковую строку")
     def search(self, term):
         """
@@ -46,24 +45,25 @@ class NegativPage:
 
         """
         Вводим в строку поиска невалидное название товара '$@!#^%'.
-        """ 
+        """
         (WebDriverWait(self.__driver, 10).
          until(EC.visibility_of_element_located((By.XPATH, "//input[@id='search-popup-field']"))))
         self.__driver.find_element(
             By.XPATH, "//input[@id='search-popup-field']").send_keys(term)
-        
+
         """
         нажимаем кнопку "Найти".
         """
         self.__driver.find_element(
             By.XPATH, "//span[text()='Найти']").click()
-        
+
         novalid = WebDriverWait(self.__driver, 30).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, ".search-no-results-block__content .search-no-results-block__title"))
-            )
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, ".search-no-results-block__content .search-no-results-block__title"))
+        )
         novalid_text = novalid.text
         print(novalid_text)
-        
+
         """
         Появляется текст 'Ничего не нашлось'
         """

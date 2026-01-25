@@ -67,8 +67,7 @@ class CartPage:
             EC.visibility_of_element_located
             ((By.XPATH,
              "(//div[@class='mtsds-button__text-container' "
-              "and contains(text(), 'Купить')])[1]"))
-        ).click()
+              "and contains(text(), 'Купить')])[1]"))).click()
 
     @allure.step("Переход в корзину")
     def cart_count(self):

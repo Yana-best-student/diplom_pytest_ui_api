@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 
 
 class UiPage:
@@ -38,8 +37,8 @@ class UiPage:
         Ожидаем появления поля поиска, кликаем на него.
         """
         (WebDriverWait(self.__driver, 10).
-         until(EC.visibility_of_element_located((By.CSS_SELECTOR, "input[name='q']"))))
-
+         until(EC.visibility_of_element_located(
+             (By.CSS_SELECTOR, "input[name='q']"))))
         self.__driver.find_element(
             By.CSS_SELECTOR, "input[name='q']").click()
 
@@ -47,7 +46,8 @@ class UiPage:
         Вводим в строку поиска название товара 'iphone'.
         """
         (WebDriverWait(self.__driver, 10).
-         until(EC.visibility_of_element_located((By.XPATH, "//input[@id='search-popup-field']"))))
+         until(EC.visibility_of_element_located(
+             (By.XPATH, "//input[@id='search-popup-field']"))))
         self.__driver.find_element(
             By.XPATH, "//input[@id='search-popup-field']").send_keys(term)
 

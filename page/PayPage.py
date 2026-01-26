@@ -3,7 +3,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class PayPage:
 
@@ -12,7 +15,7 @@ class PayPage:
         Конструктор класса PageObject.
         :param driver: Webdriver — объект драйвера Selenium.
         """
-        self.__url = "https://shop.mts.ru/"
+        self.__url = os.getenv("UI_URL")
         self.__driver = browser
 
     @allure.step("Открытие главной страницы интернет-магазина")
@@ -63,8 +66,7 @@ class PayPage:
         """
         WebDriverWait(self.__driver, 30).until(
             EC.visibility_of_element_located
-            ((By.XPATH, "(//div[@class='mtsds-button__text-container' and contains(text(), 'Купить')])[1]"))
-            ).click()
+            ((By.XPATH, "(//div[@class='mtsds-button__text-container' and contains(text(), 'Купить')])[1]"))).click()
 
     @allure.step("Переход в корзину")
     def cart_count(self):
@@ -145,12 +147,17 @@ class PayPage:
         Переходим в раздел  выбора способа оплаты:
         'Сейчас онлайн Любой картой, СБП через MTS PAY'.
         """
-        
+
         WebDriverWait(self.__driver, 30).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//span[@class='radio-button__text']"))).click()
         
-        
+    def get_pay_metod_text(self):
+        element = WebDriverWait(self.__driver, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//span[@class='radio-button__text']"))
+        )
+        return element.text  
 
         # button = WebDriverWait(self.__driver, 30).until(
         #     EC.element_to_be_clickable(

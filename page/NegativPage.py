@@ -3,7 +3,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class NegativPage:
 
@@ -12,7 +15,7 @@ class NegativPage:
         Конструктор класса PageObject.
         :param driver: Webdriver — объект драйвера Selenium.
         """
-        self.__url = "https://shop.mts.ru/"
+        self.__url = os.getenv("UI_URL")
         self.__driver = browser
 
     @allure.step("Открытие главной страницы интернет-магазина")

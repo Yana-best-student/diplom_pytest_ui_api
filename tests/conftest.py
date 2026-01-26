@@ -1,15 +1,14 @@
 import allure
 import pytest
 from selenium import webdriver
-from configuration.ConfigProvider import ConfigProvider
+
 
 
 @pytest.fixture
 def browser():
-    with allure.step("Открыть и настроить браузер"):
-        timeout = ConfigProvider().getint("ui", "timeout")
+    with allure.step("Открыть и настроить браузер"):        
         browser = webdriver.Chrome()
-        browser.implicitly_wait(timeout)
+        browser.implicitly_wait(10)
         browser.maximize_window()
         yield browser
 

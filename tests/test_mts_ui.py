@@ -16,7 +16,7 @@ from selenium.webdriver.support import expected_conditions as EC
 @allure.description("Тест проверяет работу строки поиска товара, "
                     "возможность найти товар с названием на латинице")
 @allure.severity(allure.severity_level.BLOCKER)
-def test_first(browser):
+def test_search_product(browser):
     """
     Поиск товара на латинице .
     :param browser: webdriver - объект драйвера, переданый фикстурой.
@@ -29,14 +29,9 @@ def test_first(browser):
         auth_page.set_cookie_policy()
     with allure.step("Ввод названия товара на латинице через поисковую строку"):
         auth_page.search('iphone')
-
     with allure.step("Проверка результата:список товаров не пустой"):
-        results = WebDriverWait(browser, 10).until(
-            EC.presence_of_all_elements_located(
-                (By.CSS_SELECTOR, ".card-name.product-card__name-link"))
-        )
-        assert len(results) > 0, "Список товаров пуст!"
-        print("Список товаров не пуст.")
+        assert auth_page.get_product_count() > 0, "Список товаров пуст!"
+        
 
 
 @allure.feature("МТС")
@@ -47,7 +42,7 @@ def test_first(browser):
                     "выбранного товара в корзину,"
                     " работоспособность кнопки купить")
 @allure.severity(allure.severity_level.BLOCKER)
-def test_second(browser):
+def test_add_product_cart(browser):
     """
     Поиск товара и добавление его в корзину через нажатие кнопки купить.
     :param browser: webdriver - объект драйвера, переданый фикстурой.
@@ -78,7 +73,7 @@ def test_second(browser):
                     " возможность оформить доставку"
                     " заказа курьером по заданому адресу")
 @allure.severity(allure.severity_level.CRITICAL)
-def test_third(browser):
+def test_form_delivery(browser):
     """
     Поиск товара и добавление его в корзину через нажатие кнопки купить.
     Проверка возможности оформления доставки курьером по определенному адресу
@@ -103,12 +98,9 @@ def test_third(browser):
     with allure.step("Проверяем переход в раздел 'Выбор способа оплаты'"):
         pay_page.button_click()
     with allure.step("Переход осуществлен. Проверяем текст элемента с одним из способов оплаты 'Сейчас онлайн'"):
-        text_element = WebDriverWait(browser, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, "//span[@class='radio-button__text']"))
-        )
-        expected_text = "Сейчас онлайн"
-        assert expected_text in text_element.text
+        assert "Сейчас онлайн" in pay_page.get_pay_metod_text()
+
+        
     # pay_page.first_name('Иван')
 
 
@@ -118,7 +110,7 @@ def test_third(browser):
 @allure.description("Тест проверяет возможность "
                     "удаления выбранного товара из корзины")
 @allure.severity(allure.severity_level.BLOCKER)
-def test_fourth(browser):
+def test_del_product(browser):
     """
     Удаление товара из корзины через иконку 'Мусорки'.
     :param browser: webdriver - объект драйвера, переданый фикстурой.

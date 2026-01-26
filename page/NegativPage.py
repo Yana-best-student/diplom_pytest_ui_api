@@ -58,6 +58,9 @@ class NegativPage:
         self.__driver.find_element(
             By.XPATH, "//span[text()='Найти']").click()
 
+    @allure.step("Проверяем текст сообщения 'Ничего не нашлось'")   
+    def result_search(self):    
+
         novalid = WebDriverWait(self.__driver, 30).until(
             EC.visibility_of_element_located(
                 (By.CSS_SELECTOR, ".search-no-results-block__content .search-no-results-block__title"))

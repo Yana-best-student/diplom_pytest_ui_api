@@ -63,11 +63,8 @@ class CartPage:
         """
         Ждем, пока кнопка 'Купить' станет видимой, нажимаем на кнопку.
         """
-        WebDriverWait(self.__driver, 30).until(
-            EC.visibility_of_element_located
-            ((By.XPATH,
-             "(//div[@class='mtsds-button__text-container' "
-              "and contains(text(), 'Купить')])[1]"))).click()
+        WebDriverWait(self.__driver, 30).until(EC.visibility_of_element_located(
+            (By.XPATH, "(//div[@class='mtsds-button__text-container' and contains(text(), 'Купить')])[1]"))).click()
 
     @allure.step("Переход в корзину")
     def cart_count(self):
@@ -102,6 +99,5 @@ class CartPage:
         )
         txt = self.__driver.find_element(
             By.XPATH, "//input[@name='input-quantity']").get_attribute('value')
-        # Забираем только число из строки, если это необходимо
         number_str = txt.split()[0]
         return int(number_str)

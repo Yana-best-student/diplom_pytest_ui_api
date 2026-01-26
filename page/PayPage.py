@@ -139,15 +139,18 @@ class PayPage:
         self.__driver.find_element(
             By.XPATH, "//button[contains(@class, 'button--primary')]").click()
 
-    @allure.step("Выбор способа оплаты")
+    @allure.step("Выбор способа оплаты 'Сейчас онлайн Любой картой, СБП через MTS PAY'")
     def button_click(self):
         """
         Переходим в раздел  выбора способа оплаты:
         'Сейчас онлайн Любой картой, СБП через MTS PAY'.
         """
+        
         WebDriverWait(self.__driver, 30).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//span[@class='radio-button__text']"))).click()
+        
+        
 
         # button = WebDriverWait(self.__driver, 30).until(
         #     EC.element_to_be_clickable(
